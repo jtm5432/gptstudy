@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import RenderRedis from '.  /components/myRedisData.js';
+import RenderRedis from './components/myRedisData.js';
 
 const HomePage = ({ data }) => {
   return <RenderRedis data={data} />
 };
 
 export async function getServerSideProps() {
-  const response = await axios.get('/api/renderRedis');
+  const response = await fetch('http://localhost:4000/api/renderRedis');
 
   if (!response.ok) {
     return {
