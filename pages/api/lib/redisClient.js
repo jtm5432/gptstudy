@@ -48,15 +48,22 @@ const myRedis = {
         }
     },
     //keyArray의 각 요소에 대해 데이터를 가져와 values 객체에 저장하는 함수
-
+    
     getData: async (keyArray) => {
         const values = {};
-        keyArray.reduce(async (Acc,cv) =>{
-            try{   
-                return Acc.cv = await redisClient.get(cv)
-            } catch(e){
-                return Acc.cv = 'errorIndex';
-            }} ,values)    
+        console.log('startGetData',keyArray)
+        for (const key of keyArray) {
+            try {
+               console.log('get', key);
+               
+              values[key] =  await redisClient.lrange(key, 0, -1);
+              
+            } catch (e) {
+              console.log(key,e);
+              values[key] = 'errorIndex';
+            }
+          }
+        return  values;
     },
   };
 

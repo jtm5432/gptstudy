@@ -3,7 +3,12 @@ const { Configuration, OpenAIApi } = require('openai');
 import myRedis from './lib/redisClient.js';
 import PPGtranse from './lib/papagoTrans.js';
 
-
+/**
+ * 입력 받은 msg를 ChatGpt에 물어봄. 
+ * 물어볼땐 영어로 , 답변을 영어로 받으면 그걸 한글로 번역함
+ * 나온 답변을 키값과 함께 redis에 저장
+ * @returns 
+ */
 
 
 export default function ChatGPT() {
@@ -82,10 +87,10 @@ export default function ChatGPT() {
       return "GptError";
     }
     
-    console.log('keyword',keyWordAnswer,'message',apiAnswer)
+    //console.log('keyword',keyWordAnswer,'message',apiAnswer)
     let KorApiAnswer = await setTranseLan('ko').getTrans(apiAnswer);
-
-    console.log('transmessageis',KorApiAnswer)
+    keyWordAnswer=keyWordAnswer.replaceAll('\n',''); //줄바꿈 삭제
+    //console.log('transmessageis',KorApiAnswer)
     sendRedis(keyWordAnswer,KorApiAnswer);
     return KorApiAnswer;
   }
@@ -98,7 +103,7 @@ export default function ChatGPT() {
     
     return myRedis.lpush(key, textvalue).then(result => {
       if (typeof result === 'number') {
-          console.log('Set operation was successful');
+          console.log('Set operation was successful',key);
           resolve(result);
         } else {
           console.log('Set operation was not successful',result);
