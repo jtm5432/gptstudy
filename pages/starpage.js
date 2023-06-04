@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import RenderRedis from './components/myRedisData.js';
+import RenderRedisTextArea from './components/RedisTextArea.js';
 import myRedis from './api/lib/redisClient.js';
 
 const HomePage = ({ data }) => {

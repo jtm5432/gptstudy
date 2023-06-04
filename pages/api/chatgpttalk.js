@@ -89,9 +89,10 @@ export default function ChatGPT() {
     
     //console.log('keyword',keyWordAnswer,'message',apiAnswer)
     let KorApiAnswer = await setTranseLan('ko').getTrans(apiAnswer);
-    keyWordAnswer=keyWordAnswer.replaceAll('\n',''); //줄바꿈 삭제
+    keyWordAnswer = keyWordAnswer.replace(/\n/g, '').replace(/<[^>]+>/g, '');
+    const RedisAnswer = message + '\n' + KorApiAnswer; //redis에 저장되는 질문+ 답변 한글 응답
     //console.log('transmessageis',KorApiAnswer)
-    sendRedis(keyWordAnswer,KorApiAnswer);
+    sendRedis(keyWordAnswer,RedisAnswer);
     return KorApiAnswer;
   }
     /**
