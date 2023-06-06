@@ -1,3 +1,5 @@
+/** redistest용 js파일 */
+
 import myRedis from './lib/redisClient.js';
 
 export default async function handler(req, res) {

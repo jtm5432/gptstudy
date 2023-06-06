@@ -1,20 +1,32 @@
 import MyRedisData from './components/myRedisData.js';
 import myRedis from './api/lib/redisClient.js';
 import RenderRedisTextArea from './components/RedisTextArea.js';
+import { createContext, useContext, useState } from 'react';
 
-export default function KeyPage({ response }) {
+
+export default function KeyPage({ response,keyData }) {
+  const [renderData, setRenderData] = useState(response);
+  const handleDelete = async (index) => {
+    // 삭제 작업 발생 시 상태를 업데이트하여 다시 렌더링
+   // await myRedis.deleteData(keyData,index)
+    let updatedData = [...renderData];
+    setRenderData(updatedData);
+  };
   //keydata가 array가 아니라면
+
+
   if (!Array.isArray(response)) { 
     console.log('keyData',response)
-    return <div><RenderRedisTextArea  data={response} /></div>;
+    return <div><RenderRedisTextArea key={renderData} data={response} index={0}/></div>;
   } 
   else {
+    console.log('keyData',response.length)
     //검색된 결과를 textarea에 넣어준다.
     return (
-      <div>
-        {response.map((item, index) => (
-          <RenderRedisTextArea key={index} data={item} />
-        ))}
+      <div id="RedisListDiv">
+        {renderData.map((item, index) => (
+          <RenderRedisTextArea  key={index} data={item} index={index} onDelete={() => handleDelete(index)}/>
+         ))}
       </div>
       )
   }
@@ -35,7 +47,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      response,
+      response,keyData
       // Add any other props your component needs
     },
   };

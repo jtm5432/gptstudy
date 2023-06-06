@@ -20,7 +20,6 @@ const myRedis = {
             return await redisClient.set(key, value);
         } catch (error) {
             console.error(`Error setting value for key: ${key}`, error);
-
         }
     },
     /**
@@ -54,10 +53,8 @@ const myRedis = {
         console.log('startGetData',keyArray)
         for (const key of keyArray) {
             try {
-               console.log('get', key);
-               
-              values[key] =  await redisClient.lrange(key, 0, -1);
-              
+                console.log('get', key);
+                values[key] =  await redisClient.lrange(key, 0, -1);
             } catch (e) {
               console.log(key,e);
               values[key] = 'errorIndex';
@@ -65,6 +62,16 @@ const myRedis = {
           }
         return  values;
     },
+    deleteData: async (key, index) => {
+        const uniqueId = key;
+        try {
+            await redisClient.lset(key, index, uniqueId);
+        
+            console.log(`Index ${index} removed from ${key}`);
+        } catch (e) {
+            console.log(`Error removing index ${index} from ${key}: ${e}`);
+        }
+      },
   };
 
 export default myRedis;
