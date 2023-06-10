@@ -1,6 +1,7 @@
 
 const { Configuration, OpenAIApi } = require('openai');
 import myRedis from './lib/redisClient.js';
+import fireBase from './lib/fireBase.js';
 import PPGtranse from './lib/papagoTrans.js';
 
 /**
@@ -90,9 +91,10 @@ export default function ChatGPT() {
     //console.log('keyword',keyWordAnswer,'message',apiAnswer)
     let KorApiAnswer = await setTranseLan('ko').getTrans(apiAnswer);
     keyWordAnswer = keyWordAnswer.replace(/\n/g, '').replace(/<[^>]+>/g, '');
-    const RedisAnswer = message + '\n' + KorApiAnswer; //redis에 저장되는 질문+ 답변 한글 응답
+    const saveAnswer = message + '\n' + KorApiAnswer; //redis에 저장되는 질문+ 답변 한글 응답
     //console.log('transmessageis',KorApiAnswer)
-    sendRedis(keyWordAnswer,RedisAnswer);
+    //sendRedis(keyWordAnswer,saveAnswer);
+    sendFireBase(keyWordAnswer,saveAnswer);
     return KorApiAnswer;
   }
     /**
@@ -118,7 +120,17 @@ export default function ChatGPT() {
       console.error('Unhandled promise rejection', error);
     });
   }
+  function sendFireBase(key,textvalue){
+    fireBase.setCollection(key);
+    let GetTIME = Date.now().toString();
+    console.log('GetTIME',GetTIME)
+    return new Promise( (resolve,reject) => {
+      return fireBase.saveData(GetTIME,textvalue).then(result => {
+        console.log('User data saved successfully',result)
+      }).catch(error => console.error('Error saving user data: ', error));
+    });
 
+  }
   return {
     sendMessage: sendMessage
   }

@@ -1,5 +1,6 @@
 // lib/redisClient.js
 import Redis from 'ioredis';
+import firebase from "firebase";
 
 const redisClient = new Redis({
   port: 6379,
@@ -62,16 +63,7 @@ const myRedis = {
           }
         return  values;
     },
-    deleteData: async (key, index) => {
-        const uniqueId = key;
-        try {
-            await redisClient.lset(key, index, uniqueId);
-        
-            console.log(`Index ${index} removed from ${key}`);
-        } catch (e) {
-            console.log(`Error removing index ${index} from ${key}: ${e}`);
-        }
-      },
+
   };
 
 export default myRedis;
