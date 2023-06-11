@@ -93,7 +93,7 @@ export default function ChatGPT() {
     keyWordAnswer = keyWordAnswer.replace(/\n/g, '').replace(/<[^>]+>/g, '');
     const saveAnswer = message + '\n' + KorApiAnswer; //redis에 저장되는 질문+ 답변 한글 응답
     //console.log('transmessageis',KorApiAnswer)
-    //sendRedis(keyWordAnswer,saveAnswer);
+    sendRedis(keyWordAnswer);
     sendFireBase(keyWordAnswer,saveAnswer);
     return KorApiAnswer;
   }
@@ -106,7 +106,7 @@ export default function ChatGPT() {
     
     return myRedis.lpush(key, textvalue).then(result => {
       if (typeof result === 'number') {
-          console.log('Set operation was successful',key);
+          console.log('Set operation was successful',result,key);
           resolve(result);
         } else {
           console.log('Set operation was not successful',result);

@@ -1,10 +1,9 @@
-import MyRedisData from './components/myRedisData.js';
-import myRedis from './api/lib/redisClient.js';
+import fireBaseData from './api/lib/fireBase.js';
 import RenderRedisTextArea from './components/RedisTextArea.js';
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 
 
-export default function KeyPage({ response,keyData }) {
+export default function KeyPage({ response }) {
   const [renderData, setRenderData] = useState(response);
   const handleDelete = async (index) => {
     // 삭제 작업 발생 시 상태를 업데이트하여 다시 렌더링
@@ -13,7 +12,6 @@ export default function KeyPage({ response,keyData }) {
     setRenderData(updatedData);
   };
   //keydata가 array가 아니라면
-
 
   if (!Array.isArray(response)) { 
     console.log('keyData',response)
@@ -36,18 +34,23 @@ export async function getServerSideProps(context) {
   const keyData = context.params.key;
   let response; 
   try {
-    response = await myRedis.getData([keyData]);
+    response = await fireBaseData.get(keyData)
+    .then(querySnapshot => {
+      return querySnapshot.docs.map(doc => {
+        return { id: doc.id, data: doc.data() };
+      });
+    });
   } catch(E){
     console.log('Error',E)
   }
-  response=response[keyData];
-  console.log('getdata',response,'keydata',[keyData]);
+  
+  console.log('getdata',response);
   //getData
   // Do any server-side operations you need to get data for MyRedisData
 
   return {
     props: {
-      response,keyData
+      response
       // Add any other props your component needs
     },
   };
