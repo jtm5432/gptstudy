@@ -90,7 +90,7 @@ export default function ChatGPT() {
     
     //console.log('keyword',keyWordAnswer,'message',apiAnswer)
     let KorApiAnswer = await setTranseLan('ko').getTrans(apiAnswer);
-    keyWordAnswer = keyWordAnswer.replace(/\n/g, '').replace(/<[^>]+>/g, '');
+    keyWordAnswer = keyWordAnswer.replace(/\n/g, '').replace(/<[^>]+>|"/g, '');
     const saveAnswer = message + '\n' + KorApiAnswer; //redis에 저장되는 질문+ 답변 한글 응답
     //console.log('transmessageis',KorApiAnswer)
     sendRedis(keyWordAnswer);

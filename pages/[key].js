@@ -23,7 +23,7 @@ export default function KeyPage({ response }) {
     return (
       <div id="RedisListDiv">
         {renderData.map((item, index) => (
-          <RenderRedisTextArea  key={index} data={item} index={index} onDelete={() => handleDelete(index)}/>
+          <RenderRedisTextArea  key={item.id} keyData={item.keyData} data={item.data.value} index={index} onDelete={() => handleDelete(index)}/>
          ))}
       </div>
       )
@@ -37,7 +37,7 @@ export async function getServerSideProps(context) {
     response = await fireBaseData.get(keyData)
     .then(querySnapshot => {
       return querySnapshot.docs.map(doc => {
-        return { id: doc.id, data: doc.data() };
+        return { id: doc.id, keyData: keyData, data: doc.data() };
       });
     });
   } catch(E){
