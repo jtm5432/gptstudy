@@ -127,7 +127,8 @@ export default function ChatGPT() {
     return new Promise( (resolve,reject) => {
       return fireBase.saveData(GetTIME,textvalue).then(result => {
         console.log('User data saved successfully',result)
-      }).catch(error => console.error('Error saving user data: ', error));
+        resolve();
+      }).catch(error => reject());
     });
 
   }
