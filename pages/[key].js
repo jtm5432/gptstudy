@@ -17,6 +17,9 @@ export default function KeyPage({ response }) {
     //await myRedis.deleteData(keyData,index)
     */
   };
+  const redisListDivStyle = {
+    height: "80vh", // document의 80% 높이에 해당하는 값으로 설정 (조정 가능)
+  };
   //keydata가 array가 아니라면  
   const handleSave = async (text, id, collection) => {
     console.log('handlesave',text,id)
@@ -47,7 +50,7 @@ export default function KeyPage({ response }) {
     console.log('keyData',response.length)
     //검색된 결과를 textarea에 넣어준다.
     return (
-      <div id="RedisListDiv">
+      <div id="RedisListDiv"  style={redisListDivStyle}>
         {renderData.map((item, index) => (
           <RenderRedisTextArea 
            key={item.id}
