@@ -15,7 +15,7 @@ import PPGtranse from './lib/papagoTrans.js';
 export default function ChatGPT() {
   // Function to send a message and receive a response from ChatGPT
   const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: "",
   });
   
   const openai = new OpenAIApi(configuration);

@@ -65,6 +65,7 @@ export default function KeyPage({ response }) {
       )
   }
 }
+
 async function getfirebaseData(keyData){
 
   try {
@@ -75,13 +76,23 @@ async function getfirebaseData(keyData){
   }
 }
 
+async function getfirebaseDataAfter(keyData, startAfterDoc){
+  try {
+    return await myfirebase.getDataAfter(keyData,startAfterDoc);    
+  } catch(E){
+    console.log('Error',E)
+    return [];
+  }
+  
+}
+
 export async function getServerSideProps(context) {
   const keyData = context.params.key;
-  let response = await getfirebaseData(keyData).then(querySnapshot => {
-    return querySnapshot.docs.map(doc => {
+  let response = await getfirebaseDataAfter(keyData).then(querySnapshot => {
+    return querySnapshot.docs.map(doc => { console.log(doc)
       return { id: doc.id, keyData: keyData, data: doc.data() };
     });
-  });; 
+  });
   console.log('getdata',response);
   return {
     props: {
