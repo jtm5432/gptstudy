@@ -1,0 +1,19 @@
+import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import HomePage from './stratPage';
+
+const queryClient = new QueryClient();
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div>
+        <HomePage {...pageProps} /> 
+      </div>
+      <ReactQueryDevtools initialIsOpen={false} /> {/* React Query Devtools 사용 */}
+    </QueryClientProvider>
+  );
+}
+
+export default MyApp;
